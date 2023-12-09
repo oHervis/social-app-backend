@@ -109,6 +109,13 @@ export class Event {
   }
 
   changeDate(date: Date) {
+    if (this.status === EventStatuses.CONCLUDED) {
+      throw new Error("Event is concluded");
+    }
+    if (this.status === EventStatuses.STARTED) {
+      throw new Error("Event is started");
+    }
+
     this.date = new EventDate(date).getValue();
   }
 
