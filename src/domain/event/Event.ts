@@ -1,7 +1,6 @@
 import { EventDescription } from "./value-objects/EventDescription";
 import { EventImage } from "./value-objects/EventImage";
-import { EventLocation } from "./EventLocation";
-import { Organizer } from "./EventOrganizer";
+import { Organizer } from "./Organizer";
 import { EventPrice } from "./value-objects/EventPrice";
 import { EventRating } from "./EventRating";
 import { EventDate } from "./value-objects/EventData";
@@ -11,11 +10,12 @@ import { EventStatus, EventStatuses } from "./value-objects/EventStatus";
 import { EventParticipant } from "./EventParticipant";
 import { EventMaxParticipants } from "./value-objects/EventMaxParticipants";
 import { EventMinParticipants } from "./value-objects/EventMinParticipants";
+import { Location } from "../value-objects/Location";
 
 export class Event {
   private name: string;
   private date: Date;
-  private location: EventLocation;
+  private location: Location;
   private description: string;
   private image: string;
   private rating: number;
@@ -30,7 +30,7 @@ export class Event {
   constructor(eventData: EventData) {
     this.name = new EventName(eventData.name).getValue();
     this.date = new EventDate(eventData.date).getValue();
-    this.location = new EventLocation({
+    this.location = new Location({
       address: eventData.address,
       city: eventData.city,
       state: eventData.state,
