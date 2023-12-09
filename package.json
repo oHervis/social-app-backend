@@ -1,0 +1,24 @@
+{
+  "name": "social-app-backend",
+  "version": "1.0.0",
+  "description": "An Backend for social app starter",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oHervis/social-app-backend.git"
+  },
+  "keywords": [
+    "social-app",
+    "events",
+    "schedule"
+  ],
+  "author": "Alexandro Hervis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oHervis/social-app-backend/issues"
+  },
+  "homepage": "https://github.com/oHervis/social-app-backend#readme"
+}
