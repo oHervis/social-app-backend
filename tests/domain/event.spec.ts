@@ -1,7 +1,7 @@
-import { Event } from "../src/domain/event/Event";
-import { EventParticipant } from "../src/domain/event/EventParticipant";
-import { EventCategories } from "../src/domain/event/value-objects/EventCategory";
-import { EventStatuses } from "../src/domain/event/value-objects/EventStatus";
+import { Event } from "../../src/domain/event/Event";
+import { EventParticipant } from "../../src/domain/event/EventParticipant";
+import { EventCategories } from "../../src/domain/event/value-objects/EventCategory";
+import { EventStatuses } from "../../src/domain/event/value-objects/EventStatus";
 
 function eventFactory(params: any = {}) {
   return {
@@ -11,7 +11,7 @@ function eventFactory(params: any = {}) {
     city: "Event city",
     state: "Event state",
     description: "Event description",
-    image: "Event image",
+    image: "https://eventimage.com",
     rating: 5,
     price: 100,
     category: EventCategories.BUSINESS,
@@ -102,6 +102,7 @@ describe("Event", () => {
     const event = new Event(eventFactory({ status: EventStatuses.STARTED }));
 
     // Act
+    event.startEvent();
     event.concludeEvent();
 
     // Assert

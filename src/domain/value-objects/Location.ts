@@ -3,9 +3,9 @@ import { City } from "./City";
 import { State } from "./State";
 
 export class Location {
-  private readonly address: string;
-  private readonly city: string;
-  private readonly state: string;
+  readonly address: string;
+  readonly city: string;
+  readonly state: string;
 
   constructor(locationData: LocationData) {
     this.address = new Address(locationData.address).getValue();

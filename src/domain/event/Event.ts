@@ -1,6 +1,6 @@
 import { EventDescription } from "./value-objects/EventDescription";
 import { EventImage } from "./value-objects/EventImage";
-import { Organizer } from "./Organizer";
+import { Organizer, OrganizerData } from "./Organizer";
 import { EventPrice } from "./value-objects/EventPrice";
 import { EventRating } from "./EventRating";
 import { EventDate } from "./value-objects/EventData";
@@ -9,23 +9,21 @@ import { EventCategories, EventCategory } from "./value-objects/EventCategory";
 import { EventStatus, EventStatuses } from "./value-objects/EventStatus";
 import { EventParticipant } from "./EventParticipant";
 import { EventMaxParticipants } from "./value-objects/EventMaxParticipants";
-import { EventMinParticipants } from "./value-objects/EventMinParticipants";
 import { Location } from "../value-objects/Location";
 
 export class Event {
-  private name: string;
+  readonly name: string;
+  readonly location: Location;
+  readonly description: string;
+  readonly image: string;
+  readonly rating: number;
+  readonly price: number;
+  readonly organizer: Organizer;
+  readonly maxParticipants: number;
   private date: Date;
-  private location: Location;
-  private description: string;
-  private image: string;
-  private rating: number;
-  private price: number;
   private category: string;
-  private organizer: Organizer;
   private status: string;
-  private particpants: EventParticipant[];
-  private maxParticipants: number;
-  private minParticipants: number;
+  private participants: EventParticipant[];
 
   constructor(eventData: EventData) {
     this.name = new EventName(eventData.name).getValue();
@@ -40,16 +38,17 @@ export class Event {
     this.rating = new EventRating(eventData.rating).getValue();
     this.price = new EventPrice(eventData.price).getValue();
     this.category = new EventCategory(eventData.category).getValue();
-    this.status = new EventStatus(eventData.status).getValue();
+    this.status = new EventStatus(EventStatuses.PENDING).getValue();
     this.organizer = new Organizer(eventData.organizer);
     this.maxParticipants = new EventMaxParticipants(
       eventData.maxParticipants
     ).getValue();
-    this.minParticipants = new EventMinParticipants(
-      eventData.minParticipants
-    ).getValue();
 
-    this.particpants = [];
+    this.participants = [];
+  }
+
+  getName(): string {
+    return this.name;
   }
 
   startEvent() {
@@ -71,18 +70,18 @@ export class Event {
   }
 
   addParticipant(participant: EventParticipant) {
-    if (this.particpants.length >= this.maxParticipants) {
+    if (this.participants.length >= this.maxParticipants) {
       throw new Error("Event is full");
     }
-    this.particpants.push(participant);
+    this.participants.push(participant);
   }
 
   removeParticipant(participant: EventParticipant) {
-    if (!this.particpants.length) {
+    if (!this.participants.length) {
       throw new Error("Event is empty");
     }
 
-    if (!this.particpants.includes(participant)) {
+    if (!this.participants.includes(participant)) {
       throw new Error("Participant is not in event");
     }
 
@@ -93,7 +92,7 @@ export class Event {
       throw new Error("Event is started");
     }
 
-    this.particpants.splice(this.particpants.indexOf(participant), 1);
+    this.participants.splice(this.participants.indexOf(participant), 1);
   }
 
   changeCategory(category: EventCategories) {
@@ -105,7 +104,7 @@ export class Event {
   }
 
   getParticipants(): EventParticipant[] {
-    return this.particpants;
+    return this.participants;
   }
 
   changeDate(date: Date) {
@@ -135,19 +134,6 @@ export interface EventData {
   rating: number;
   price: number;
   category: string;
-  status: string;
   maxParticipants: number;
-  minParticipants: number;
-  organizer: {
-    name: string;
-    description: string;
-    image: string;
-    rating: number;
-    website: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    state: string;
-  };
+  organizer: OrganizerData;
 }

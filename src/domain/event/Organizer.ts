@@ -6,14 +6,14 @@ import { Rating } from "../value-objects/Rating";
 import { OrganizerDescription } from "./value-objects/OrganizerDescription";
 
 export class Organizer {
-  private readonly name: string;
-  private readonly description: string;
-  private readonly image: string;
-  private readonly rating: number;
-  private readonly website: string;
-  private readonly email: string;
-  private readonly phone: string;
-  private readonly address: Location;
+  readonly name: string;
+  readonly description: string;
+  readonly image: string;
+  readonly rating: number;
+  readonly website: string;
+  readonly email: string;
+  readonly phone: string;
+  readonly address: Location;
 
   constructor(organizerData: OrganizerData) {
     this.name = new Name(organizerData.name).getValue();

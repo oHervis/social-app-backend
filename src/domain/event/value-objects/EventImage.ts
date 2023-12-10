@@ -6,6 +6,12 @@ export class EventImage {
       throw new Error("Event image is required");
     }
 
+    try {
+      new URL(image);
+    } catch (error) {
+      throw new Error("Event image is invalid");
+    }
+
     this.value = image;
   }
 
