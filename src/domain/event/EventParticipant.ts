@@ -3,10 +3,10 @@ import { Name } from "../value-objects/Name";
 import { Phone } from "../value-objects/Phone";
 
 export class EventParticipant {
-  private name: string;
-  private email: string;
-  private phone: string;
-  private image: string;
+  readonly name: string;
+  readonly email: string;
+  readonly phone: string;
+  readonly image?: string;
 
   constructor(participantsData: EventParticipantInput) {
     this.name = new Name(participantsData.name).getValue();
@@ -20,5 +20,5 @@ export interface EventParticipantInput {
   name: string;
   email: string;
   phone: string;
-  image: string;
+  image?: string;
 }

@@ -1,13 +1,15 @@
 import { OrganizerData } from "../../../domain/event/Organizer";
 import { Event } from "../../../domain/event/Event";
-import { CreateEventRepository } from "../../repositories/events/create-event-repository";
+import { EventRepository } from "../../repositories/events/event-repository";
 import { UploadImageGateway } from "../../gateway/upload-image.gateway";
+import { PushNotificationGateway } from "../../gateway/push-notification.gateway";
 
 export class CreateEvent {
   constructor(
     private readonly createEventInput: CreateEventInput,
-    private readonly createEventRepository: CreateEventRepository,
-    private readonly uploadImageGateway: UploadImageGateway
+    private readonly eventRepository: EventRepository,
+    private readonly uploadImageGateway: UploadImageGateway,
+    private readonly pushNotificationGateway: PushNotificationGateway
   ) {}
 
   async execute(): Promise<CreateEventOutput> {
@@ -43,7 +45,12 @@ export class CreateEvent {
       organizer: organizer,
     });
 
-    const eventCreated = await this.createEventRepository.execute(event);
+    const eventCreated = await this.eventRepository.createEvent(event);
+
+    await this.pushNotificationGateway.sendNotification({
+      body: `New event created: ${event.getName()}`,
+      title: event.getName(),
+    });
 
     return {
       id: eventCreated.id,

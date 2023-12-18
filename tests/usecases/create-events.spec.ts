@@ -1,4 +1,4 @@
-import { CreateEventRepository } from "../../src/application/repositories/events/create-event-repository";
+import { EventRepository } from "../../src/application/repositories/events/event-repository";
 import {
   CreateEvent,
   CreateEventInput,
@@ -6,6 +6,10 @@ import {
 import { EventCategories } from "../../src/domain/event/value-objects/EventCategory";
 import { Event } from "../../src/domain/event/Event";
 import { UploadImageGateway } from "../../src/application/gateway/upload-image.gateway";
+import {
+  PushNotification,
+  PushNotificationGateway,
+} from "../../src/application/gateway/push-notification.gateway";
 
 function eventFactory(params: any = {}) {
   return {
@@ -38,11 +42,19 @@ function eventFactory(params: any = {}) {
   };
 }
 
-function repositoryCreateEventFactory(params: any = {}): CreateEventRepository {
+function repositoryCreateEventFactory(params: any = {}): EventRepository {
   return {
-    execute: async (event: Event) => {
+    createEvent: async (event: Event) => {
       return params;
     },
+    getEventById: async (id: string) => {
+      return eventFactory({ id });
+    },
+    getEvents: async () => {
+      return [eventFactory()];
+    },
+    updateEvent: async (event: Event) => {},
+    deleteEvent: async (id: string) => {},
   };
 }
 
@@ -54,19 +66,29 @@ function createImageUploadGateway(): UploadImageGateway {
   };
 }
 
+function createPushNotificationGateway(): PushNotificationGateway {
+  return {
+    async sendNotification(notification: PushNotification): Promise<void> {
+      console.log(notification);
+    },
+  };
+}
+
 describe("Create Event Usecases", () => {
   it("should create an event", async () => {
     const createEventInput: CreateEventInput = eventFactory();
-    const createEventRepository = repositoryCreateEventFactory({
+    const EventRepository = repositoryCreateEventFactory({
       id: "78fdeb0c-f37d-484b-9ab1-deb0d24421a7",
     });
 
     const uploadGateway = createImageUploadGateway();
+    const pushNotificationGateway = createPushNotificationGateway();
 
     const createEventUseCases = new CreateEvent(
       createEventInput,
-      createEventRepository,
-      uploadGateway
+      EventRepository,
+      uploadGateway,
+      pushNotificationGateway
     );
 
     const event = await createEventUseCases.execute();
